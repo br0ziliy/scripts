@@ -30,6 +30,8 @@
 #       v0.1: Initial release
 #   2015-10-30, Stanislav Ochotnicky <sochotnicky@gmail.com>
 #       v0.2: Reply to public pings as well and add more informative pong
+#   2016-03-23, Vasiliy Kaygorodov <vkaygorodov@gmail.com>
+#       v0.3: Added random sleep to not confuse people with immediate replies
 #
 
 SCRIPT_NAME    = "autopong"
@@ -37,6 +39,9 @@ SCRIPT_AUTHOR  = "Wil Clouser <clouserw@micropipes.com>"
 SCRIPT_VERSION = "0.2"
 SCRIPT_LICENSE = "MIT"
 SCRIPT_DESC    = "Auto-replies to 'ping' queries"
+
+from random import randint
+from time import sleep
 
 import_ok = True
 
@@ -57,8 +62,10 @@ def msg_cb(data, buffer, date, tags, displayed, is_hilight, prefix, msg):
   if not w.buffer_get_string(buffer, "localvar_type") == "private":
     reply = prefix + ": " + reply
     if is_hilight and msg.endswith('ping'):
+      sleep(randint(4,10))
       w.command(buffer, reply)
   elif msg == 'ping':
+      sleep(randint(4,10))
       w.command(buffer, reply)
 
   return w.WEECHAT_RC_OK
